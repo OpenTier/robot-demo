@@ -1,0 +1,68 @@
+FROM ros:jazzy
+
+# Set noninteractive mode
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Set working directory
+WORKDIR /workspace
+
+# Add Zenoh repository
+RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" \
+    | sudo tee -a /etc/apt/sources.list > /dev/null
+
+# Install required packages (explicitly include python3 and python3-dev)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    wget \
+    curl \
+    tar \
+    python3 \
+    python3-dev \
+    python3-colcon-common-extensions \
+    python3-pip \
+    python3-rosdep \
+    python3-vcstool \
+    protobuf-compiler \
+    libprotobuf-dev \
+    zenoh \
+    libzenohcpp-dev \
+    libzenohc-dev \
+    libcurl4-openssl-dev \
+    clang-tidy \
+    clang-format \
+    flex \
+    bison \
+    gperf \
+    usbutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the ROS2 workspace and related repositories into the container
+COPY ../edge_device/ros2_ws/ ./edge_device/ros2_ws/
+COPY ../vehicle-cloud-api ./vehicle-cloud-api/
+COPY ../micro_ros_setup ./micro_ros_setup/
+
+# Build microROS Agent:
+# 1. Create a microROS agent workspace by linking micro_ros_setup into a new uros_ws.
+# 2. Update rosdep and install dependencies.
+RUN mkdir -p /workspace/edge_device/uros_ws/src && \
+    ln -s /workspace/micro_ros_setup /workspace/edge_device/uros_ws/src/micro_ros_setup && \
+    rosdep update && \
+    rosdep install --from-paths /workspace/edge_device/uros_ws/src --ignore-src -y
+
+# 3. Build only the micro_ros_setup package and then create & build the agent.
+RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && \
+    colcon build --packages-select micro_ros_setup --parallel-workers 1" && \
+    /bin/bash -c "source ./install/setup.bash && \
+    ros2 run micro_ros_setup create_agent_ws.sh && \
+    ros2 run micro_ros_setup build_agent.sh"
+
+# Build the full ROS2 workspace with merge-install (self-contained install)
+# Pre-create the merge install directory to avoid issues in CMake/Python
+RUN mkdir -p install_merge && \
+    /bin/bash -c "source ./install/setup.bash && \
+    export CXXFLAGS='-O0 -fno-lto' && \
+    colcon build --merge-install --install-base install_merge"
+
+# Create a tar.gz archive of the merged install folder.
+RUN tar -czf /workspace/ros2_bundle.tar.gz -C /workspace/install_merge .

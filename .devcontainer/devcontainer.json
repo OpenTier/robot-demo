@@ -1,0 +1,50 @@
+{
+    "name": "OpenTier Robot Container",
+    "privileged": true,
+    "remoteUser": "dev",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "dev"
+        }
+    },
+    "workspaceFolder": "/home/dev/opentier-robot-demo",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/dev/opentier-robot-demo,type=bind",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-themes",
+                "twxs.cmake",
+                "donjayamanne.python-extension-pack",
+                "eamodio.gitlens",
+                "ms-iot.vscode-ros"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": "unix:0",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_DOMAIN_ID": "42"
+    },
+    "remoteEnv": {
+        "SSH_AUTH_SOCK": "/ssh-agent"
+    },
+    "runArgs": [
+        "--net=host",
+        "--pid=host",
+        "--ipc=host",
+        "-e",
+        "DISPLAY=${env:DISPLAY}",
+        "--device=/dev/ttyUSB0"
+    ],
+    "mounts": [
+        // comment out mounting of tmp for remote session
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+        "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+        "source=${localEnv:HOME}/.gitconfig,target=/home/dev/.gitconfig,type=bind,consistency=cached",
+        "source=${localEnv:HOME}/.ssh,target=/home/dev/.ssh,type=bind,consistency=cached",
+        "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
+    ],
+    "postCreateCommand": "sudo chown -R $(whoami) /home/dev/opentier-robot-demo/ && /home/dev/opentier-robot-demo/scripts/install_uros.sh"
+}

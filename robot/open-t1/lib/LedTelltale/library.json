@@ -1,0 +1,8 @@
+{
+    "name": "LedTelltale",
+    "version": "1.0.0",
+    "description": "Control a LED telltale",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+    }
+  

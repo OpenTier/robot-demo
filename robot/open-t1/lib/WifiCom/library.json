@@ -1,0 +1,7 @@
+{
+  "name": "WifiCom",
+  "version": "1.0.0",
+  "description": "Wifi Communication Driver.",
+  "frameworks": ["espidf"],
+  "platforms": ["espressif32"]
+}

@@ -1,0 +1,11 @@
+[submodule "vehicle-cloud-api"]
+	path = vehicle-cloud-api
+	url = https://github.com/OpenTier/vehicle-cloud-api.git
+[submodule "micro_ros_setup"]
+	path = micro_ros_setup
+	url = https://github.com/micro-ROS/micro_ros_setup.git
+	branch = jazzy
+[submodule "robot/open-t1/components/micro_ros_espidf_component"]
+	path = robot/open-t1/components/micro_ros_espidf_component
+	url = https://github.com/micro-ROS/micro_ros_espidf_component.git
+	branch = jazzy

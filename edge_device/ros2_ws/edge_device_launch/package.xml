@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>edge_device_launch</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="bartosz.burda@opentier.com">dev</maintainer>
+  <license>TODO: License declaration</license>
+
+  <!-- Build tool -->
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- Runtime dependencies for launch -->
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
+  <!-- Runtime dependencies for nodes -->
+  <build_depend>cloud_comm_node</build_depend>
+  <build_depend>robot_comm_node</build_depend>
+  <build_depend>system_status_node</build_depend>
+  <build_depend>vision_node</build_depend>
+
+  <exec_depend>cloud_comm_node</exec_depend>
+  <exec_depend>robot_comm_node</exec_depend>
+  <exec_depend>system_status_node</exec_depend>
+  <exec_depend>vision_node</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

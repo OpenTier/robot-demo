@@ -1,0 +1,31 @@
+import launch
+from launch import LaunchDescription
+import launch_ros.actions
+
+def generate_launch_description():
+    return LaunchDescription([
+        # Launch the cloud_comm_node
+        launch_ros.actions.Node(
+            package='my_package',  # Replace with your package name
+            executable='cloud_comm_node',
+            name='cloud_comm_node'
+        ),
+        # Launch the robot_comm_node
+        launch_ros.actions.Node(
+            package='my_package',  # Replace with your package name
+            executable='robot_comm_node',
+            name='robot_comm_node'
+        ),
+        # Launch the system_status_node
+        launch_ros.actions.Node(
+            package='my_package',  # Replace with your package name
+            executable='system_status_node',
+            name='system_status_node'
+        ),
+        # Launch the vision_node
+        launch_ros.actions.Node(
+            package='my_package',  # Replace with your package name
+            executable='vision_node',
+            name='vision_node'
+        )
+    ])

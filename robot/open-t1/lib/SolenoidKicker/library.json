@@ -1,0 +1,8 @@
+{
+    "name": "SolenoidKicker",
+    "version": "1.0.0",
+    "description": "Driver for the Kicker used in the Robot Soccer Kit.",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+    }
+  

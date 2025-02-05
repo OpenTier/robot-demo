@@ -1,0 +1,8 @@
+{
+    "name": "SabertoothRC",
+    "version": "1.0.0",
+    "description": "Sabertooth 2x12 RC Driver for ESP32-S3 using new MCPWM driver",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+  }
+  

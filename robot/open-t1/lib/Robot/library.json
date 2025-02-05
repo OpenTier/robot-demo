@@ -1,0 +1,8 @@
+{
+    "name": "Robot",
+    "version": "1.0.0",
+    "description": "The main component holding all Robot parts",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+  }
+  

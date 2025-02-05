@@ -1,0 +1,8 @@
+{
+    "name": "BatterySensor",
+    "version": "1.0.0",
+    "description": "Battery Sensor to check the robot power.",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+    }
+  

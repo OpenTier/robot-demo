@@ -1,0 +1,55 @@
+# Build the ROS2 workspace
+FROM ros:jazzy AS builder
+
+# Add Zenoh repository
+RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    python3-pip protobuf-compiler libprotobuf-dev \
+    python3-colcon-common-extensions libzenohcpp-dev libzenohc-dev \
+    libcurl4-openssl-dev clang-tidy clang-format flex bison gperf wget curl \
+    usbutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory for the ROS2 workspace
+WORKDIR /ros2_ws
+
+# Copy the ROS2 workspace source from the host (located at <root_dir>/edge_device/ros2_ws)
+COPY ../edge_device/ros2_ws/ ./edge_device/ros2_ws/
+COPY ../vehicle-cloud-api ./vehicle-cloud-api/
+COPY ../micro_ros_setup ./micro_ros_setup/
+
+# Build microROS
+RUN mkdir -p /ros2_ws/edge_device/uros_ws/src && \
+    ln -s /ros2_ws/micro_ros_setup /ros2_ws/edge_device/uros_ws/src/micro_ros_setup && \
+    rosdep update && \
+    rosdep install --from-paths /ros2_ws/edge_device/uros_ws/src --ignore-src -y
+
+# Build the microROS workspace
+RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --packages-select micro_ros_setup" && \
+    /bin/bash -c "source ./install/setup.bash && ros2 run micro_ros_setup create_agent_ws.sh && ros2 run micro_ros_setup build_agent.sh"
+
+# Build the workspace.
+# Sourcing the ROS environment is needed so that colcon can locate ROS packages.
+RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build"
+
+# Runner stage
+FROM ros:jazzy
+
+# Add Zenoh repository
+RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    zenoh libprotobuf-dev libzenohcpp-dev libzenohc-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only the built artifacts from the builder stage.
+COPY --from=builder /ros2_ws/install /ros2_ws/install
+
+# Append the sourcing of the built workspace to the ROS entrypoint script
+RUN echo "source /ros2_ws/install/local_setup.bash" >> /ros_entrypoint.sh
+
+# CMD that sources the workspace and then launches the package
+CMD ["bash", "-c", "source /ros2_ws/install/local_setup.bash && ros2 launch edge_device_launch edge_device_launch.py"]

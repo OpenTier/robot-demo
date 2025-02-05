@@ -1,0 +1,8 @@
+{
+    "name": "MecanumDrive",
+    "version": "1.0.0",
+    "description": "Mecanum robot control interface using two SabertoothRC motor controllers.",
+    "frameworks": ["espidf"],
+    "platforms": ["espressif32"]
+    }
+  
