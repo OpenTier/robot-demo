@@ -45,7 +45,7 @@ Flash Robot2
 idf.py erase-flash && idf.py build -DCMAKE_CXX_FLAGS="-DUROS_CONTROLLER=1 -DROBOT_ID=2 -DDOMAIN_ID=42" && idf.py flash && idf.py monitor
 ```
 
-You can set `-DCOMMAND_TIMEOUT_MS` to change a timeout for stoping robot when no message received for given time. By default it is `1000` ms - 1 second.
+You can set `-DCOMMAND_TIMEOUT_MS` to change a timeout for stopping robot when no message received for given time. By default it is `1000` ms - 1 second.
 
 You can modify the values of `ROBOT_ID` and `DOMAIN_ID` to adjust for your ROS 2 nodes. This works only if `-DUROS_CONTROLLER=1` is set.
 
