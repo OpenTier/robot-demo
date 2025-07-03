@@ -19,7 +19,7 @@ Welcome to the OpenTier Robot Demonstrator repository. This project showcases a 
 1. Clone this repository:
     ```sh
     git clone https://github.com/OpenTier/robot-demo.git
-    cd opentier-robot-demonstrator
+    cd robot-demo
     git submodule update --init --recursive
     ```
 
@@ -46,7 +46,7 @@ docker run --name edge_device_ros2 edge_device_ros2:0.0.1
 ## Run on RPI and ESP32
 
 1. Change zenoh config at `edge_device/ros2_ws/edge_device_launch/config/zenoh_config.json5` to use server IP
-2. Setup, build and depl
+2. Setup, build and deploy the ROS 2 workspace on the Raspberry Pi
 
 ```sh
 ./scripts/install_ros2_on_rpi.sh
