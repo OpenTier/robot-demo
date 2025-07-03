@@ -86,9 +86,13 @@ public:
   {
     edge_msgs::Move move_msg;
     move_msg.robot_id = robot_id;
-    move_msg.dturn = proto_cmd.control().dturn();
+    // Populate fields in the same order as defined in the ROS message
+    // (dx, dy, then dturn).  The previous implementation filled these in a
+    // different order which meant the command values would be swapped when
+    // received by the robot_comm_node.
     move_msg.dx = proto_cmd.control().dx();
     move_msg.dy = proto_cmd.control().dy();
+    move_msg.dturn = proto_cmd.control().dturn();
 
     return move_msg;
   }
