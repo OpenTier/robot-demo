@@ -3,9 +3,9 @@
 <package format="3">
   <name>vision_node</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Example node for future vision processing tasks on the edge device.</description>
   <maintainer email="bart@opentier.com">dev</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MPL-2.0</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

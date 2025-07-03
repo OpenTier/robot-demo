@@ -3,9 +3,9 @@
 <package format="3">
   <name>edge_device_launch</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Launch package that starts all edge device nodes, the micro-ROS agent and the Zenoh router.</description>
   <maintainer email="bartosz.burda@opentier.com">dev</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MPL-2.0</license>
 
   <!-- Build tool -->
   <buildtool_depend>ament_python</buildtool_depend>
