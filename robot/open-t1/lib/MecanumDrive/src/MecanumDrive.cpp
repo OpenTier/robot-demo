@@ -57,14 +57,15 @@ MecanumDrive::MecanumDrive(SabertoothRC &leftController, SabertoothRC &rightCont
     setMotorSpeed(REAR_LEFT, 0);
     setMotorSpeed(REAR_RIGHT, 0);
 
-    // Set the maximum speed magnitud between -100 and 100
-    maxSpeedMagnitude = Clamp(maxSpeed, -100, 100);
+    // Set the maximum speed magnitude between -100 and 100
+    maxSpeedMagnitude = Clamp(maxSpeed, -100.f, 100.f);
 
 }
 
 void MecanumDrive::setMotorSpeed(MotorIndex motor, int speedPercent)
 {
-    speedPercent = Clamp(speedPercent, -maxSpeedMagnitude, maxSpeedMagnitude);
+    speedPercent = static_cast<int>(
+        Clamp(static_cast<float>(speedPercent), -maxSpeedMagnitude, maxSpeedMagnitude));
     if (motor >= 0 && motor < MOTOR_COUNT)
     {
         SabertoothRC *ctrl = motorMap[motor].controller;
@@ -90,9 +91,12 @@ void MecanumDrive::setMotorSpeed(MotorIndex motor, int speedPercent)
 void MecanumDrive::controlVelocityNormalized(int xPercent, int yPercent, int rotationPercent)
 {
     // Clamp inputs to avoid exceeding your max.
-    xPercent       = Clamp(xPercent, -maxSpeedMagnitude, maxSpeedMagnitude);
-    yPercent       = Clamp(yPercent, -maxSpeedMagnitude, maxSpeedMagnitude);
-    rotationPercent = Clamp(rotationPercent, -maxSpeedMagnitude, maxSpeedMagnitude);
+    xPercent = static_cast<int>(
+        Clamp(static_cast<float>(xPercent), -maxSpeedMagnitude, maxSpeedMagnitude));
+    yPercent = static_cast<int>(
+        Clamp(static_cast<float>(yPercent), -maxSpeedMagnitude, maxSpeedMagnitude));
+    rotationPercent = static_cast<int>(
+        Clamp(static_cast<float>(rotationPercent), -maxSpeedMagnitude, maxSpeedMagnitude));
 
     // -------------------------------------------------------------
     // Standard Mecanum formula (assuming +X=forward, +Y=left, +rot=CCW)
