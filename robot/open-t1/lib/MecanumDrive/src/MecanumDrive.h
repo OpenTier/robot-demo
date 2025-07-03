@@ -3,6 +3,7 @@
 
 #include <string>
 #include <array>
+#include <algorithm>
 #include "SabertoothRC.h"
 
 class MecanumDrive
@@ -42,6 +43,12 @@ private:
 
     // Helper to clamp a value between min and max.
     inline int Clamp(int value, int minVal, int maxVal)
+    {
+        return std::max(std::min(value, maxVal), minVal);
+    }
+
+    // Float overload for Clamp
+    inline float Clamp(float value, float minVal, float maxVal)
     {
         return std::max(std::min(value, maxVal), minVal);
     }
