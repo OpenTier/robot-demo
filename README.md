@@ -1,6 +1,48 @@
 # OpenTier Robot Demonstrator
 
-Welcome to the OpenTier Robot Demonstrator repository. This project showcases a OpenTier Robot system using a mobile robot and edge device for computer vision and cloud connectivity.
+Welcome to the OpenTier Robot Demonstrator repository. This project showcases a
+OpenTier Robot system that combines a micro-ROS powered mobile robot with a
+Raspberry Pi edge device running ROS&nbsp;2. The goal is to demonstrate how an
+affordable robot can perform computer vision locally while remaining connected
+to cloud services.
+
+## Purpose
+
+This repository contains all the code required to build a small robot platform
+and an edge device that communicate using ROS&nbsp;2. The mobile robot uses an
+ESP32&nbsp;S3 board and micro-ROS to expose motor control and sensor data. The
+edge device processes camera images, sends commands to the robot and relays
+information to cloud services. Together, they form a complete demo of an open
+robotics pipeline from embedded hardware to the cloud.
+
+## Technologies
+
+- **micro-ROS** and **ESP-IDF** for the robot firmware
+- **ROS&nbsp;2 Jazzy** for the edge device nodes
+- **Docker** to build reproducible environments
+- **Python** and **C++** for the ROS&nbsp;2 packages
+- **Zenoh** for cloud connectivity
+
+## Architecture
+
+```mermaid
+graph TD
+    ESP32((ESP32 Robot))
+    Camera((Camera))
+    EdgeDevice((Raspberry Pi Edge Device))
+    Cloud[(Cloud API)]
+
+    ESP32 -- micro-ROS --> EdgeDevice
+    Camera --> EdgeDevice
+    EdgeDevice -- Zenoh/WebSocket --> Cloud
+```
+
+### Networking stack
+
+The ESP32 firmware communicates with the edge device over **micro-ROS** using
+the **XRCE-DDS** transport. ROS&nbsp;2 nodes on the Raspberry&nbsp;Pi run with the
+default **Fast DDS** middleware. A local **Zenoh** router (launched via
+`zenohd`) connects the edge device to the cloud services.
 
 ## Project Structure
 
@@ -65,3 +107,4 @@ docker run --name edge_device_ros2 edge_device_ros2:0.0.1
 4. Change the `sdkconfig` Agent IP in `robot/open-t1/sdkconfig`
 5. Set proper compilers flags
 6. Build and flash the ESP32
+
